@@ -1,7 +1,7 @@
 mpvue微信小程序课程表
 ===
 
-小程序已经上线 准备完善之后在学校推广
+小程序已经上线 准备完善之后在学校推广<br>
 <img width="300" height="600" src="https://github.com/jiangxuhang/kechengbiao/blob/master/ReadmeImage/kechengbiao.png">
 
 下载源码
