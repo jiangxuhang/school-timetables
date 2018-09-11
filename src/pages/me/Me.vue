@@ -12,6 +12,10 @@
         <button @click = "save" class = "button">登陆</button>
       </div>
     </div>
+    <div class="testinfo">
+      目前小程序还在测试阶段，登陆和信息获取时可能会出现问题。预计将在2周之后稳定，请大家期待我们的正式版本。 <br>
+      意见反馈 wx:yuehualingxiu
+    </div>
   </div>
 </template>
 <script>
@@ -57,7 +61,7 @@ export default {
       if(!mis.data.iPlanetDirectoryPro) {
         return wx.showToast({
           title:'登陆失败',
-          icon:'loading',
+          icon:'none',
         });
       }
       this.iPlanetDirectoryPro = mis.data.iPlanetDirectoryPro;
@@ -82,8 +86,9 @@ div {
   color:#707070;
 }
 .username input,.password input {
-  box-shadow:0 3rpx 5rpx -1rpx #707070;
+  border-bottom:1px solid #707070;
   width:60%;
+  padding-top:10rpx;
 }
 span {
   display:inline-block;
@@ -108,6 +113,14 @@ span {
   color:#707070;
   box-shadow:0 1rpx 5rpx -1rpx #707070;
   margin-left:100rpx;
+}
+
+.testinfo {
+  width:80vw;
+  font-size:0.3rem;
+  margin:0 auto;
+  color:#888;
+  padding-top:30rpx;
 }
 
 </style>

@@ -22,9 +22,9 @@
 	  		<img src="../../images/luqu.png" alt="" style="height:70%;margin-top:20rpx">
 	  		<span class = "tap" style="margin-top:-35rpx">更换账号</span>
 	  	</div>
-	  	<div class = "jiaowu" @click = "wait">
+	  	<div class = "jiaowu" @click = "showMap">
 	  		<img src="../../images/jiaowu.png" alt="">
-	  		<span class = "tap">教务公告</span>
+	  		<span class = "tap">校园地图</span>
 	  	</div>
 	  	<div class = "xiaozhao" @click = "wait">
 	  		<img src="../../images/xiaozhao.png" alt="">
@@ -62,9 +62,14 @@ export default {
 		wait() {
 			wx.showToast({
 				title:'功能开发中',
-				icon:'loading',
+				icon:'none',
 			})
 		},
+		showMap() {
+			wx.previewImage({
+				urls:["http://www.hlju.edu.cn/images/xydt1111.jpg"]
+			})
+		}
 	},
 	async onPullDownRefresh() {
 		wx.stopPullDownRefresh();

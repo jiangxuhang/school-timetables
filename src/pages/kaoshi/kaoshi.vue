@@ -48,7 +48,7 @@ export default {
 			//password:"970414jiang",
 			//position:"kb",
 			flag:"4",
-			xnxqdm:"2017-2018-2"
+			xnxqdm:"2018-2019-1"
 		}).then((req)=>{
 			clearInterval(interval);
 			wx.hideToast();
@@ -63,13 +63,24 @@ export default {
 			await wx.clearStorageSync();
 			wx.redirectTo({url:"../me/main"});
 		}
-		if(ks.data[0].classDetails.length == 0) {
+		if(ks.data[0].classDetails.length == 0 && ks.data[1].classDetails.length == 0) {
 			this.flag = 1;
+		}else {
+			this.flag = 0;
 		}
-		//console.log(ks);
 		//处理考试信息 整合为一个对象
 		this.ksxx = ks.data.map((p)=>{
 			let info = {};
+			if(!p.classDetails[6]) {
+				p.classDetails[6] = {name:"地点未知"};
+			}
+			if(!p.classDetails[7]) {
+				p.classDetails[7] = {name:"闭卷"};
+			}
+			if(!p.classDetails[9]) {
+				p.classDetails[9] = {name:"未开始"};
+			}
+
 			// if(p.classDetails[1]){
 			// 	info.name = p.classDetails[1].name;
 			// 	console.log(info);
@@ -112,6 +123,7 @@ export default {
 	margin:30rpx auto;
 	box-shadow:0 5rpx 15rpx -3rpx #707070;
 	border-radius:20rpx;
+	color:#707070;
 }
 .kctop {
 	display:flex;

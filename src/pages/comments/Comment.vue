@@ -9,14 +9,35 @@
   		</picker>
   	</div>
   	<div class = "week">
-  		<div>{{nowMonth}}月</div>
-  		<div>周一</div>
-  		<div>周二</div>
-  		<div>周三</div>
-  		<div>周四</div>
-  		<div>周五</div>
-  		<div>周六</div>
-  		<div>周日</div>
+  		<div class="month">{{nowMonth}}月</div>
+  		<div>
+  			<div>周一</div>
+  			<div>{{dayTime}}</div>
+  		</div>
+  		<div>
+  			<div>周二</div>
+  			<div>{{dayTime + 1}}</div>
+  		</div>
+  		<div>
+  			<div>周三</div>
+  			<div>{{dayTime + 2}}</div>
+  		</div>
+  		<div>
+  			<div>周四</div>
+  			<div>{{dayTime + 3}}</div>
+  		</div>
+  		<div>
+  			<div>周五</div>
+  			<div>{{dayTime + 4}}</div>
+  		</div>
+  		<div>
+  			<div>周六</div>
+  			<div>{{dayTime + 5}}</div>
+  		</div>
+  		<div>
+  			<div>周日</div>
+  			<div>{{dayTime + 6}}</div>
+  		</div>
   	</div>
   	<div class = "kebiao">
   		<div class = "time">
@@ -75,6 +96,13 @@ export default {
 		},
 		nowMonth() {
 			return new Date().getMonth() + 1;
+		},
+		//课程表显示日历信息 返回本周周一是几号
+		dayTime() {
+			let weektime =  new Date().getDay() || 7;//周几
+			let date = new Date();
+			date.setDate(date.getDate() - weektime + 1);
+			return date.getDate();
 		}
 	},
 	methods: {
@@ -220,9 +248,11 @@ export default {
 		var gradestart = new Date(2018,8,2);
 		var now = new Date();
 		var day = parseInt((now - gradestart) / (1000 * 60 * 60 * 24));
+		console.log("day",day);
 		if(Math.ceil(day / 7) > 18 || Math.ceil(day / 7) <= 0) {
 			this.weektime = 1;
 		}else {
+			console.log("yes");
 			this.weektime = Math.ceil(day / 7);
 		}
 		this.week = this.weektime % 2 ? "单" : "双";
@@ -397,12 +427,18 @@ export default {
 	border-radius:20rpx;
 	width:96vw;
 	height:8vh;
-	line-height:8vh;
+	line-height:4vh;
 	margin:0 auto;
 	color:#707070;
 }
-.week div {
-	
+.week div div {
+	height:50%;
+	width:100%;
+	font-size:0.3rem;
+	text-align:center;
+}
+.month {
+	line-height:8vh;
 }
 .kebiao {
 	display:flex;
