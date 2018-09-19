@@ -21,13 +21,35 @@
 			"current": -1,
 			"list": []
 		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
 		"game": {
 			"currentL": -1,
 			"list": []
 		},
 		"miniprogram": {
-			"current": -1,
-			"list": []
+			"current": 2,
+			"list": [
+				{
+					"id": -1,
+					"name": "who",
+					"pathName": "pages/who/main",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "person",
+					"pathName": "pages/person/main",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "person",
+					"pathName": "pages/gongyi/main"
+				}
+			]
 		}
 	}
 }

@@ -111,6 +111,8 @@ export default {
 				title:'课程信息',
 				content:`${classInfo.name}
 						${classInfo.week}-${classInfo.weekend}周
+						${classInfo.teacher}
+						${classInfo.other || ""}
 				`,
 			});
 		},
@@ -195,6 +197,10 @@ export default {
 				}
 				for(let i = 0; i < p.classDetails.length; i ++){
 					let trap = p.classDetails[i].name.split(' ');
+					if(trap[6]) {
+						p.classDetails[i].other = trap[6] + " " + trap[7] + " " + trap[11];
+						console.log(p.classDetails[i].other);
+					}
 					if(trap[5]){
 						//判断该节课占4节还是2节
 						let test = trap[2].split("-")[1][0] - trap[2].split("-")[0][2];
@@ -292,7 +298,7 @@ export default {
 			wx.hideToast();
 			return req;
 		});
-		console.log(kb);
+
 		if(kb.data == "error") {
 			wx.showToast({
 				title:"加载中",
@@ -325,10 +331,13 @@ export default {
 				this.flag = 0;
 				//p.classDetails.splice(1,0,"111");
 				p.classDetails.splice(this.local,0,{name:""});
-				console.log(p.classDetails);
 			}
 			for(let i = 0; i < p.classDetails.length; i ++){
 				let trap = p.classDetails[i].name.split(' ');
+				//冲突的课程
+				if(trap[6]) {
+					p.classDetails[i].other = trap[6] + " " + trap[7] + " " + trap[11];
+				}
 				if(trap[5]){
 					//判断该节课占4节还是2节
 					let test = trap[2].split("-")[1][0] - trap[2].split("-")[0][2];
@@ -339,6 +348,7 @@ export default {
 					}
 
 					p.classDetails[i].name = trap[0] + trap[5];
+					//单双周课程
 					if( trap[1].indexOf("(") != -1 ) {
 						p.classDetails[i].danshuang = trap[1].split("(")[1][0];
 						var week = trap[1].split("(")[0];
@@ -356,6 +366,7 @@ export default {
 						var weekslice = week[week.length - 1].indexOf("周");
 						p.classDetails[i].weekend = week[week.length - 1].slice(0,weekslice);
 					}
+					p.classDetails[i].teacher = trap[3];
 				}else{
 					// console.log(p.classDetails[i].name);
 					p.classDetails[i].name = "";

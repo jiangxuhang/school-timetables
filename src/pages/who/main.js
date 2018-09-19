@@ -1,7 +1,7 @@
 import Vue from 'vue'
-import Map from './Map'
+import Who from './Who'
 
-const app = new Vue(Map)
+const app = new Vue(Who)
 app.$mount()
 
 export default {

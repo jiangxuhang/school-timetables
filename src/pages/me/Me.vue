@@ -13,8 +13,8 @@
       </div>
     </div>
     <div class="testinfo">
-      目前小程序还在测试阶段，登陆和信息获取时可能会出现问题。预计将在2周之后稳定，请大家期待我们的正式版本。 <br>
-      意见反馈 wx:yuehualingxiu
+      提示：首次登陆需要的时间较长，请大家耐心等待~
+      意见反馈 wx:18846076361
     </div>
   </div>
 </template>
@@ -64,9 +64,42 @@ export default {
           icon:'none',
         });
       }
+      wx.showToast({
+        title:"加载中",
+        icon:"loading",
+        duration: 5000,
+      });
+      interval = setInterval(()=>{
+        wx.showToast({
+          title:"加载中",
+          icon:"loading",
+          duration: 5000,
+        });
+      },5000);
       this.iPlanetDirectoryPro = mis.data.iPlanetDirectoryPro;
+      await post("https://kcb.sayetuan.com/schoolwatcher/timetable",{
+        iPlanetDirectoryPro:this.iPlanetDirectoryPro,
+        username:this.username,
+        flag:"4",
+        xnxqdm:"2018-2019-1"
+      });
+      await post("https://kcb.sayetuan.com/schoolwatcher/score",{
+        iPlanetDirectoryPro:this.iPlanetDirectoryPro,
+        username:this.username,
+        flag:"4",
+        xnxqdm:"2018-2019-1"
+      });
+      await post("https://kcb.sayetuan.com/schoolwatcher/exam",{
+        iPlanetDirectoryPro:this.iPlanetDirectoryPro,
+        username:this.username,
+        flag:"4",
+        xnxqdm:"2018-2019-1"
+      });
+      clearInterval(interval);
+      wx.hideToast();
       await wx.setStorageSync("iPlanetDirectoryPro",this.iPlanetDirectoryPro);
       await wx.setStorageSync("username",this.username);
+      await wx.setStorageSync("password",this.password);
       wx.redirectTo({url:"../index/main"});
     }
   }

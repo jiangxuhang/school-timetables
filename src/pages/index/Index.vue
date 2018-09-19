@@ -26,23 +26,23 @@
 	  		<img src="../../images/jiaowu.png" alt="">
 	  		<span class = "tap">校园地图</span>
 	  	</div>
-	  	<div class = "xiaozhao" @click = "wait">
-	  		<img src="../../images/xiaozhao.png" alt="">
-	  		<span class = "tap">校招信息</span>
+	  	<div class = "xiaozhao" @click = "linkToUs">
+	  		<img src="../../images/whoami.png" alt="">
+	  		<span class = "tap">who am I</span>
 	  	</div>
 	  </div>
-	  <div class = "three_row" @click = "wait">
+	  <div class = "three_row" @click = "linkToGy">
 	  	<div class = "siliuji">
 	  		<img src="../../images/siliuji.png" alt="">
-	  		<span class = "tap">四六级成绩</span>
+	  		<span class = "tap">公益项目</span>
 	  	</div>
 	  	<div class = "lianxi" @click = "wait">
 	  		<img src="../../images/lianxi.png" alt="">
-	  		<span class = "tap">联系我们</span>
+	  		<span class = "tap">万人聊天群</span>
 	  	</div>
 	  	<div class = "whoami" @click = "wait">
-	  		<img src="../../images/whoami.png" alt="">
-	  		<span class = "tap">who am I</span>
+	  		<img src="../../images/xiaozhao.png" alt="">
+	  		<span class = "tap">活动</span>
 	  	</div>
 	  </div>
 	</div>
@@ -52,12 +52,18 @@ export default {
 	methods: {
 		todetail(e) {
 			// wx.setStorageSync("iPlanetDirectoryPro","iPlanetDirectoryPro=AQIC5wM2LY4Sfcynt6Em7J0k8sd%2B6LrAEKVzFzTulbX5J%2Fc%3D%40AAJTSQACMDE%3D%23");
-			let mis = wx.getStorageSync("iPlanetDirectoryPro");
+			let mis = wx.getStorageSync("username");
 			if(mis){
 				wx.navigateTo({ url:`../${e}/main` });
 			}else{
 				wx.navigateTo({ url:"../me/main" });
 			}
+		},
+		linkToUs() {
+			wx.navigateTo({ url:"../who/main"});
+		},
+		linkToGy() {
+			wx.navigateTo({ url:"../gongyi/main"});
 		},
 		wait() {
 			wx.showToast({
