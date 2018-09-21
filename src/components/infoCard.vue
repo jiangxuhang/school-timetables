@@ -23,7 +23,7 @@ export default {
 	},
 	data() {
 		return {
-			url:"../../images/whoami.png"
+			url:""
 		}
 	}
 }

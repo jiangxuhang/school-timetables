@@ -31,8 +31,8 @@
 	  		<span class = "tap">who am I</span>
 	  	</div>
 	  </div>
-	  <div class = "three_row" @click = "linkToGy">
-	  	<div class = "siliuji">
+	  <div class = "three_row">
+	  	<div class = "siliuji" @click = "linkToGy">
 	  		<img src="../../images/siliuji.png" alt="">
 	  		<span class = "tap">公益项目</span>
 	  	</div>
@@ -62,14 +62,15 @@ export default {
 		linkToUs() {
 			wx.navigateTo({ url:"../who/main"});
 		},
-		linkToGy() {
-			wx.navigateTo({ url:"../gongyi/main"});
-		},
+		
 		wait() {
 			wx.showToast({
 				title:'功能开发中',
 				icon:'none',
 			})
+		},
+		linkToGy() {
+			wx.navigateTo({ url:"../gongyi/main"});
 		},
 		showMap() {
 			wx.previewImage({

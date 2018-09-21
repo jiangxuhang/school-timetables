@@ -1,7 +1,7 @@
 <template>
-  <div>
-  	<div class = "yuan" :class="itemname" @click="returnmain(itemname)">
-  		<div>{{content}}</div>
+  <div class="content">
+  	<div class = "yuan" :class="itemname">
+  		<div @click="returnmain(itemname)">{{content}}</div>
   	</div>
   </div>
 </template>
@@ -11,6 +11,11 @@ export default {
 	props:['content','itemname'],
 	methods: {
 		returnmain(itemname) {
+			if(itemname =="more") {
+				return wx.previewImage({
+					urls:["http://img.5z88.com/newspaper/picture/399/content/2017/12/08/2017120801144144296.jpg"]
+				})
+			}
 			console.log(itemname);
 			wx.navigateTo({ url:`../${itemname}/main` });
 		}
@@ -19,13 +24,14 @@ export default {
 </script>
 
 <style>
+	.content {
+	}
 	.yuan {
 		color:#707070;
 		height:150rpx;
 		width:150rpx;
 		border-radius:50%;
 		box-shadow:0rpx 1rpx 10rpx -1rpx #707070;
-		overflow:hidden;
 		position:absolute;
 		font-size:.3rem;
 		text-align:center;
@@ -34,7 +40,8 @@ export default {
 
 	.yuan div {
 		margin-top: 58rpx;
-		
+		height:150rpx;
+		width:150rpx;
 	}
 
 	.person {
@@ -42,7 +49,7 @@ export default {
 	}
 
 	.fuzao {
-		margin:220rpx 0 0 400rpx;
+		margin:200rpx 0 0 420rpx;
 	}
 
 	.saye {

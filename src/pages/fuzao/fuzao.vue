@@ -1,9 +1,9 @@
 <template>
 	<div>
-		不仅需要技术，我们更需要你有一个梦想，联系HR<br>
-		微信:13099993193
+		<img src="../../images/fuzao.jpg" alt="">
 	</div>
 </template>
+
 <script>
 export default {
 	data(){
@@ -13,16 +13,24 @@ export default {
 	components: {
 	},
 	methods: {
-	}
+
+	},
 
 }
 </script>
 
 <style>
+	* {
+		padding:0;
+		margin:0;
+	}
 	div {
-		width:70%;
-		color:#707070;
+		width:90vw;
 		margin:0 auto;
-		margin-top:300rpx;
+		margin-top:30vh;
+	}
+	img {
+		width:100%;
+		height:30vw;
 	}
 </style>

@@ -18,21 +18,17 @@ export default {
 				name:"党皓玄",
 				local:"电子工程学院"
 			},{
-				work:"创意策划",
-				name:"党皓玄",
+				work:"前端工程师",
+				name:"江旭航",
 				local:"电子工程学院"
 			},{
-				work:"创意策划",
-				name:"党皓玄",
+				work:"后端工程师",
+				name:"覃信超",
 				local:"电子工程学院"
 			},{
-				work:"创意策划",
-				name:"党皓玄",
-				local:"电子工程学院"
-			},{
-				work:"创意策划",
-				name:"党皓玄",
-				local:"电子工程学院"
+				work:"UI设计",
+				name:"侯旭东",
+				local:"艺术学院"
 			}]
 		}
 	},

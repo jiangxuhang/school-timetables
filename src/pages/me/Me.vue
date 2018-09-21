@@ -1,6 +1,10 @@
 <template>
   <div class="container">
     <div class="userinfo" >
+      <img src="../../images/point.jpg" class="point" alt="">
+      <div class="tips">
+        <div class="text">点击保存到我的小程序<br>安卓保存到桌面</div>
+      </div>
       <div class = "login">登陆教务系统</div>
       <div>
         <div class="username">
@@ -14,7 +18,6 @@
     </div>
     <div class="testinfo">
       提示：首次登陆需要的时间较长，请大家耐心等待~
-      意见反馈 wx:18846076361
     </div>
   </div>
 </template>
@@ -154,6 +157,26 @@ span {
   margin:0 auto;
   color:#888;
   padding-top:30rpx;
+}
+
+.tips {
+  overflow:hidden;
+  margin-right:120rpx;
+}
+
+.text {
+  float:right;
+  font-size:0.25rem;
+  color:#888;
+  margin-top:30rpx;
+}
+
+.point {
+  position:absolute;
+  right:150rpx;
+  top:0;
+  width:50rpx;
+  height:50rpx;
 }
 
 </style>
