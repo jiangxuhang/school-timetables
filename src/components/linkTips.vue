@@ -13,7 +13,7 @@ export default {
 		returnmain(itemname) {
 			if(itemname =="more") {
 				return wx.previewImage({
-					urls:["http://img.5z88.com/newspaper/picture/399/content/2017/12/08/2017120801144144296.jpg"]
+					urls:["https://kcb.sayetuan.com/schoolwatcher/img/kcblogo.jpg"]
 				})
 			}
 			console.log(itemname);

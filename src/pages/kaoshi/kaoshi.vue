@@ -20,7 +20,8 @@ export default {
 	data(){
 		return {
 			ksxx:[],
-			flag:0
+			flag:0,
+			update:'false',
 		}
 	},
 	methods: {
@@ -48,7 +49,8 @@ export default {
 			//password:"970414jiang",
 			//position:"kb",
 			flag:"4",
-			xnxqdm:"2018-2019-1"
+			xnxqdm:"2018-2019-1",
+			update:this.update
 		}).then((req)=>{
 			clearInterval(interval);
 			wx.hideToast();
@@ -112,6 +114,7 @@ export default {
 	},
 	async onPullDownRefresh() {
 		this.$options.onLoad[0]();
+		this.update = 'true';
 		wx.stopPullDownRefresh();
 	},
 }

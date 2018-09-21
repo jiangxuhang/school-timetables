@@ -17,7 +17,8 @@
       </div>
     </div>
     <div class="testinfo">
-      提示：首次登陆需要的时间较长，请大家耐心等待~
+      提示：登陆需要的时间较长，请耐心等待~<br>
+      每次登陆都会获取最新的数据信息
     </div>
   </div>
 </template>
@@ -36,13 +37,13 @@ export default {
   methods: {
     async save() {
       wx.showToast({
-        title:"加载中",
+        title:"正在登陆",
         icon:"loading",
         duration: 5000,
       });
       let interval = setInterval(()=>{
         wx.showToast({
-          title:"加载中",
+          title:"正在登陆",
           icon:"loading",
           duration: 5000,
         });
@@ -68,13 +69,13 @@ export default {
         });
       }
       wx.showToast({
-        title:"加载中",
+        title:"更新课程数据",
         icon:"loading",
         duration: 5000,
       });
       interval = setInterval(()=>{
         wx.showToast({
-          title:"加载中",
+          title:"更新课程数据",
           icon:"loading",
           duration: 5000,
         });
@@ -84,19 +85,50 @@ export default {
         iPlanetDirectoryPro:this.iPlanetDirectoryPro,
         username:this.username,
         flag:"4",
-        xnxqdm:"2018-2019-1"
+        xnxqdm:"2018-2019-1",
+        update:'true'
       });
+      clearInterval(interval);
+      wx.hideToast();
+      wx.showToast({
+        title:"更新成绩信息",
+        icon:"loading",
+        duration: 5000,
+      });
+      interval = setInterval(()=>{
+        wx.showToast({
+          title:"更新成绩信息",
+          icon:"loading",
+          duration: 5000,
+        });
+      },5000);
       await post("https://kcb.sayetuan.com/schoolwatcher/score",{
         iPlanetDirectoryPro:this.iPlanetDirectoryPro,
         username:this.username,
         flag:"4",
-        xnxqdm:"2018-2019-1"
+        xnxqdm:"2018-2019-1",
+        update:'true'
       });
+      clearInterval(interval);
+      wx.hideToast();
+      wx.showToast({
+        title:"更新考试信息",
+        icon:"loading",
+        duration: 5000,
+      });
+      interval = setInterval(()=>{
+        wx.showToast({
+          title:"更新考试信息",
+          icon:"loading",
+          duration: 5000,
+        });
+      },5000);
       await post("https://kcb.sayetuan.com/schoolwatcher/exam",{
         iPlanetDirectoryPro:this.iPlanetDirectoryPro,
         username:this.username,
         flag:"4",
-        xnxqdm:"2018-2019-1"
+        xnxqdm:"2018-2019-1",
+        update:'true'
       });
       clearInterval(interval);
       wx.hideToast();

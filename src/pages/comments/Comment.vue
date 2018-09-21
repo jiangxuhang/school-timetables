@@ -87,7 +87,8 @@ export default {
 			weektime:1,
 			stare:"2018-9-2",
 			flag:0,
-			interval:null
+			interval:null,
+			update:'false'
 		}
 	},
 	computed: {
@@ -153,7 +154,8 @@ export default {
 				//password:"970414jiang",
 				//position:"kb",
 				flag:"4",
-				xnxqdm:this.grade
+				xnxqdm:this.grade,
+				update:'false'
 			}).then((req)=>{
 				clearInterval(this.interval);
 				wx.hideToast();
@@ -288,7 +290,8 @@ export default {
 			//password:"970414jiang",
 			//position:"kb",
 			flag:"4",
-			xnxqdm:this.grade
+			xnxqdm:this.grade,
+			update:this.update
 		}).then((req)=>{
 			clearInterval(this.interval);
 			wx.hideToast();
@@ -378,6 +381,7 @@ export default {
 	//下拉刷新重新指向onLoad
 	async onPullDownRefresh() {
 		this.$options.onLoad[0]();
+		this.update = 'true';
 		wx.stopPullDownRefresh();
 	},
 }

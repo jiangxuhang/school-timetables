@@ -18,6 +18,7 @@ export default {
 	data(){
 		return {
 			cjxx:[],
+			update:'false',
 		}
 	},
 	methods: {
@@ -45,7 +46,8 @@ export default {
 			//password:"970414jiang",
 			//position:"kb",
 			flag:"4",
-			xnxqdm:"2017-2018-2"
+			xnxqdm:"2017-2018-2",
+			update:this.update
 		}).then((req)=>{
 			clearInterval(interval);
 			wx.hideToast();
@@ -62,7 +64,8 @@ export default {
 				//password:"970414jiang",
 				//position:"kb",
 				flag:"4",
-				xnxqdm:"2017-2018-2"
+				xnxqdm:"2017-2018-2",
+				update:this.update
 			});
 		}
 		if(cj.data == "error") {
@@ -86,6 +89,7 @@ export default {
 	//下拉刷新重新执行onLoad
 	async onPullDownRefresh() {
 		this.$options.onLoad[0]();
+		this.update = 'true';
 		wx.stopPullDownRefresh();
 	},
 }
