@@ -1,7 +1,7 @@
 <template>
 	<div>
 		我们正在寻找不同寻常的公益项目，如果你有好的建议请发送邮箱<br>
-		邮箱：dan@sayetuan.com <br>
+		邮箱：dang@sayetuan.com <br>
 	</div>
 </template>
 <script>
