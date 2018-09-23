@@ -71,6 +71,7 @@
 		    </div>	
 	    </div>
   	</div>
+  	<!-- <div class="notimekb">{{notimekb}}</div> -->
   </div>
 </template>
 <script>
@@ -88,7 +89,8 @@ export default {
 			stare:"2018-9-2",
 			flag:0,
 			interval:null,
-			update:'false'
+			update:'false',
+			notimekb:null
 		}
 	},
 	computed: {
@@ -166,25 +168,11 @@ export default {
 				return req;
 			});
 			if(newkb.data == "error") {
-				wx.showToast({
-					title:"加载中",
-					icon:"loading",
-					duration: 5000,
-				});
-				newkb = await post(newurl,{
-				iPlanetDirectoryPro:this.iPlanetDirectoryPro,
-				username:this.username,
-				//password:"970414jiang",
-				//position:"kb",
-				flag:"4",
-				xnxqdm:this.grade
-				});
-				wx.hideToast();
-			}
-			if(newkb.data == "error") {
 				await wx.clearStorageSync();
 				wx.redirectTo({url:"../me/main"});
 			}
+			//notimekb
+			// this.notimekb = kb.data[11].classDetails[0].name;
 			this.kbinfo = newkb.data.slice(0,11).filter((value,index) =>{
 				if(index % 2 == 0) {
 					return true;
@@ -301,28 +289,15 @@ export default {
 			wx.hideToast();
 			return req;
 		});
-
-		if(kb.data == "error") {
-			wx.showToast({
-				title:"加载中",
-				icon:"loading",
-				duration: 5000,
-			});
-			kb = await post(url,{
-				iPlanetDirectoryPro:this.iPlanetDirectoryPro,
-				username:this.username,
-				//password:"970414jiang",
-				//position:"kb",
-				flag:"4",
-				xnxqdm:this.grade
-			});
-			wx.hideToast();
-		}
 		if(kb.data == "error") {
 			await wx.clearStorageSync();
 			wx.redirectTo({url:"../me/main"});
 		}
-		//去除未安排时间课程 过滤掉空数据
+		//未安排时间的课程
+		// let notimekb = kb.data[11].classDetails[0].name;
+		// this.notimekb = notimekb.slice(26).split();
+		// console.log(this.notimekb);
+		//去除多余项 过滤掉空数据
 		this.kbinfo = kb.data.slice(0,11).filter((value,index) =>{
 			if(index % 2 == 0) {
 				return true;

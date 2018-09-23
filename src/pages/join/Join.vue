@@ -1,7 +1,8 @@
 <template>
 	<div>
-		不仅需要技术，我们更需要你有一个梦想，联系HR<br>
-		微信:13099993193
+		我们需要你有改变世界的心<br>
+		一起探索未知,一起创造未来<br>
+		HR邮箱：dang@sayetuan.com
 	</div>
 </template>
 <script>

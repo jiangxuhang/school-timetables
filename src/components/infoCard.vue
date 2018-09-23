@@ -1,12 +1,12 @@
 <template>
   <div class = "content">
   	<div class="img">
-  		<img :src="url">
+  		<img :src="content.img">
   	</div>
   	<div class="info">
 	  	<div class="topInfo">
-	  		<div class="work">{{content.work}}</div>
-	  		<div class="name">{{content.name}}</div>
+	  		<div class="work">{{content.name}}</div>
+	  		<div class="name">{{content.work}}</div>
 	  	</div>
 	  	<div class="botInfo">
 	  		{{content.local}}
@@ -44,12 +44,16 @@ export default {
 	.img {
 	}
 	img {
-		width:200rpx;
-		height:22vh;
+		display:inline-block;
+		width:180rpx;
+		height:18vh;
+		border-radius:20rpx;
+		margin: 0 20rpx;
 	}
 
 	.info {
 		height:100%;
+		margin-left:30rpx;
 	}
 
 	.topInfo {
@@ -61,6 +65,9 @@ export default {
 	.work,.name {
 		text-align:center;
 		padding-right:30rpx;
+	}
+	.botInfo {
+		font-size:.3rem;
 	}
 
 </style>

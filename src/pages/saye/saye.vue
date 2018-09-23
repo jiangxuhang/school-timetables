@@ -21,11 +21,13 @@ export default {
 
 <style>
 	div {
-		margin-top:30vh;
+		margin-top:20vh;
 		height:100vw;
 		width:100vw;
 	}
 	img {
-		width:100vw;
+		margin:0 10vw;
+		width:80vw;
+		height:80vw;
 	}
 </style>

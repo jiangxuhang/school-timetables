@@ -1,7 +1,7 @@
 <template>
 	<div class = "content">
 		<div class = "info">
-			<button open-type="share">分享给你的好友</button>
+			<button open-type="share">分享五个群 3元红包</button>
 		</div>
 		<div class = "one_row">
 	    <div class = "kebiao" @click="todetail('comments')">
@@ -91,7 +91,8 @@ export default {
 	},
 	onShareAppMessage() {
 		return {
-			title:'课程婊'
+			title:'这是一个好玩的黑大课程表',
+			imageUrl:'../../images/test.jpg'
 		}
 	}
 }
