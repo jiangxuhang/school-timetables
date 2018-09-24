@@ -45,7 +45,7 @@ export default {
 	}
 	img {
 		display:inline-block;
-		width:180rpx;
+		width:18vh;
 		height:18vh;
 		border-radius:20rpx;
 		margin: 0 20rpx;
@@ -53,7 +53,7 @@ export default {
 
 	.info {
 		height:100%;
-		margin-left:30rpx;
+		margin-left:10rpx;
 	}
 
 	.topInfo {

@@ -54,9 +54,9 @@
   			<div>11</div>
   		</div>
   		<div class = "kecheng">
-		    <div v-for='(kc,num) in kbinfo' class = "main">
+		    <div v-for='(kc,num) in kbinfo' class = "main" :key="num">
 		    	<div v-for='(name,index) in kc.classDetails' class = "content"
-		    	
+		    	:key="index"
 		    	:class="{
 		    		dispa:name.name,
 		    	}"
@@ -71,7 +71,12 @@
 		    </div>	
 	    </div>
   	</div>
-  	<!-- <div class="notimekb">{{notimekb}}</div> -->
+  	<div class="notimekb">
+  		<div>未安排时间的课程</div>
+  		<div class="detailkb" v-for="(value,index) in notimekb" :key="index">
+  			{{value}}
+  		</div>
+  	</div>
   </div>
 </template>
 <script>
@@ -171,9 +176,11 @@ export default {
 				await wx.clearStorageSync();
 				wx.redirectTo({url:"../me/main"});
 			}
-			//notimekb
-			// this.notimekb = kb.data[11].classDetails[0].name;
-			this.kbinfo = newkb.data.slice(0,11).filter((value,index) =>{
+			//未安排时间的课程
+			let newnotimekb = newkb.data[11].classDetails[0].name;
+			this.notimekb = newnotimekb.slice(26).match(/([^\s]+[\s]){3}/g);
+			//去除空数据
+			this.kbinfo = newkb.data.slice(0,11).filter((value,index) => {
 				if(index % 2 == 0) {
 					return true;
 				}
@@ -294,9 +301,8 @@ export default {
 			wx.redirectTo({url:"../me/main"});
 		}
 		//未安排时间的课程
-		// let notimekb = kb.data[11].classDetails[0].name;
-		// this.notimekb = notimekb.slice(26).split();
-		// console.log(this.notimekb);
+		let notimekb = kb.data[11].classDetails[0].name;
+		this.notimekb = notimekb.slice(26).match(/([^\s]+[\s]){3}/g);
 		//去除多余项 过滤掉空数据
 		this.kbinfo = kb.data.slice(0,11).filter((value,index) =>{
 			if(index % 2 == 0) {
@@ -450,6 +456,12 @@ export default {
 
 .test {
 	background-color:black;
+}
+
+.notimekb {
+	font-size:.3rem;
+	color:#707070;
+	text-align:center;
 }
 
 </style>
