@@ -5,7 +5,7 @@
       <div class="tips">
         <div class="text">点击保存到我的小程序<br>安卓保存到桌面</div>
       </div>
-      <div class = "login">登陆教务系统</div>
+      <div class = "login">导入教务系统</div>
       <div>
         <div class="username">
           <div>账号:&nbsp&nbsp</div><input type="text" v-model="username">
@@ -13,12 +13,15 @@
         <div class="password">
           <div>密码:&nbsp&nbsp</div><input type="password" v-model="password">
         </div>
-        <button @click = "save" class = "button">登陆</button>
+        <button @click = "save" class = "button">导入</button>
       </div>
     </div>
     <div class="testinfo">
-      首次登陆需要的时间较长，请耐心等待~<br>
-      每次登陆都会导入最新的数据信息
+      每次导入都会获取最新的数据信息
+      <div class="testinfo">
+        温馨提示:若密码输错三次将无法导入
+      </div>
+        解决方案:在校园网登录成功确认账号密码返回导入即可
     </div>
   </div>
 </template>
@@ -49,7 +52,7 @@ export default {
         });
       },5000);
       await wx.setStorageSync("interval",interval);
-      const url = "https://kcb.sayetuan.com/schoolwatcher/login";
+      const url = "https://kcb.sayetuan.com/schooltest/login";
       let mis = await post(url,{
         username:this.username,
         password:this.password
@@ -81,7 +84,7 @@ export default {
         });
       },5000);
       this.iPlanetDirectoryPro = mis.data.iPlanetDirectoryPro;
-      await post("https://kcb.sayetuan.com/schoolwatcher/timetable",{
+      await post("https://kcb.sayetuan.com/schooltest/timetable",{
         iPlanetDirectoryPro:this.iPlanetDirectoryPro,
         username:this.username,
         flag:"4",
@@ -102,7 +105,7 @@ export default {
           duration: 5000,
         });
       },5000);
-      await post("https://kcb.sayetuan.com/schoolwatcher/score",{
+      await post("https://kcb.sayetuan.com/schooltest/score",{
         iPlanetDirectoryPro:this.iPlanetDirectoryPro,
         username:this.username,
         flag:"4",
@@ -123,7 +126,7 @@ export default {
           duration: 5000,
         });
       },5000);
-      await post("https://kcb.sayetuan.com/schoolwatcher/exam",{
+      await post("https://kcb.sayetuan.com/schooltest/exam",{
         iPlanetDirectoryPro:this.iPlanetDirectoryPro,
         username:this.username,
         flag:"4",
@@ -184,7 +187,7 @@ span {
 }
 
 .testinfo {
-  width:80vw;
+  width:70vw;
   font-size:0.3rem;
   margin:0 auto;
   color:#888;

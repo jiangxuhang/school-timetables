@@ -1,9 +1,10 @@
 <template>
   <div>
   	<div class = "top-one">
-  		<picker class = "top-left" :range="year" @change="bindPickerChange">
+  		<!-- <picker class = "top-left" :range="year" @change="bindPickerChange"> -->
+  		<div class = "top-left" :range="year">
   			{{changegrade}}
-  		</picker>
+  		</div>
   		<picker class = "top-right" :range="weekarea" @change="bindWeekChange">
   			第{{weektime}}周({{week}})
   		</picker>
@@ -71,12 +72,12 @@
 		    </div>	
 	    </div>
   	</div>
-  	<div class="notimekb">
+<!--   	<div class="notimekb">
   		<div>未安排时间的课程</div>
   		<div class="detailkb" v-for="(value,index) in notimekb" :key="index">
   			{{value}}
   		</div>
-  	</div>
+  	</div> -->
   </div>
 </template>
 <script>
@@ -95,7 +96,8 @@ export default {
 			flag:0,
 			interval:null,
 			update:'false',
-			notimekb:null
+			notimekb:null,
+			local:[]
 		}
 	},
 	computed: {
@@ -120,7 +122,6 @@ export default {
 				content:`${classInfo.name}
 						${classInfo.week}-${classInfo.weekend}周
 						${classInfo.teacher}
-						${classInfo.other || ""}
 				`,
 			});
 		},
@@ -162,7 +163,7 @@ export default {
 				//position:"kb",
 				flag:"4",
 				xnxqdm:this.grade,
-				update:'false'
+				update:'true'
 			}).then((req)=>{
 				clearInterval(this.interval);
 				wx.hideToast();
@@ -177,8 +178,8 @@ export default {
 				wx.redirectTo({url:"../me/main"});
 			}
 			//未安排时间的课程
-			let newnotimekb = newkb.data[11].classDetails[0].name;
-			this.notimekb = newnotimekb.slice(26).match(/([^\s]+[\s]){3}/g);
+			// let newnotimekb = newkb.data[11].classDetails[0].name;
+			// this.notimekb = newnotimekb.slice(26).match(/([^\s]+[\s]){3}/g);
 			//去除空数据
 			this.kbinfo = newkb.data.slice(0,11).filter((value,index) => {
 				if(index % 2 == 0) {
@@ -187,7 +188,7 @@ export default {
 			});
 			this.kbinfo.map((p)=>{
 				if(this.flag) {
-					this.flag = 0;
+					this.flag--;
 					//p.classDetails.splice(1,0,"111");
 					p.classDetails.splice(this.local,0,{name:""});
 					console.log(p.classDetails);
@@ -200,11 +201,18 @@ export default {
 					}
 					if(trap[5]){
 						//判断该节课占4节还是2节
-						let test = trap[2].split("-")[1][0] - trap[2].split("-")[0][2];
+						let leng = trap[2].split("-");
+						let test = leng[1][0] - leng[0][leng[0].length - 1];
 						if(test != 1) {
 							//将信息存下 在下一个循环补充object
 							this.local = i;
-							this.flag = 1;
+							if(test >= 6) {
+								this.flag = 3;
+							}else if (test >= 4) {
+								this.flag = 2;
+							}else {
+								this.flag = 1;
+							}
 						}
 
 						p.classDetails[i].name = trap[0] + trap[5];
@@ -259,7 +267,7 @@ export default {
 			this.weektime = Math.ceil(day / 7);
 		}
 		this.week = this.weektime % 2 ? "单" : "双";
-		const url = "https://kcb.sayetuan.com/schoolwatcher/timetable";
+		const url = "https://kcb.sayetuan.com/schooltest/timetable";
 		this.iPlanetDirectoryPro = await wx.getStorageSync("iPlanetDirectoryPro");
 		this.username = await wx.getStorageSync("username");
 		let gradeinfo = wx.getStorageSync("grade");
@@ -296,13 +304,15 @@ export default {
 			wx.hideToast();
 			return req;
 		});
+		// console.log("test",kb);
 		if(kb.data == "error") {
 			await wx.clearStorageSync();
 			wx.redirectTo({url:"../me/main"});
 		}
 		//未安排时间的课程
-		let notimekb = kb.data[11].classDetails[0].name;
-		this.notimekb = notimekb.slice(26).match(/([^\s]+[\s]){3}/g);
+		// let notimekb = kb.data[11].classDetails[0].name;
+		// this.notimekb = notimekb.slice(26).match(/([^\s]+[\s]){3}/g);
+		// console.log("this.notimekb",this.notimekb);
 		//去除多余项 过滤掉空数据
 		this.kbinfo = kb.data.slice(0,11).filter((value,index) =>{
 			if(index % 2 == 0) {
@@ -311,24 +321,83 @@ export default {
 		});
 		//处理字符串 提取出课程名称和地点
 		this.kbinfo.map((p)=>{
-			if(this.flag) {
-				this.flag = 0;
-				//p.classDetails.splice(1,0,"111");
-				p.classDetails.splice(this.local,0,{name:""});
-			}
-			for(let i = 0; i < p.classDetails.length; i ++){
-				let trap = p.classDetails[i].name.split(' ');
-				//冲突的课程
-				if(trap[6]) {
-					p.classDetails[i].other = trap[6] + " " + trap[7] + " " + trap[11];
+			if(this.local.length) {
+				for(let i = 0; i < this.local.length; i++) {
+					if(this.local[i].flag) {
+						p.classDetails.splice(this.local[i].local,0,{name:""});
+						this.local[i].flag--;
+					}
 				}
+				//p.classDetails.splice(1,0,"111");
+				//p.classDetails.splice(this.local,0,{name:""});
+			}
+			for(let i = 0; i < p.classDetails.length; i++){
+				if(p.classDetails[i].name.indexOf('|') != -1) {
+					//通过|分割相同位置的课程
+					let choose = p.classDetails[i].name.split('|');
+					//时间最长的课程
+					let max = 1;
+					//当前周数所在的课程
+					let innertime = 0;
+					for(let i = 0; i < choose.length; i++) {
+						let temp = choose[i].split('#');
+						if(temp[1].indexOf(']') != -1) {
+							temp.shift();
+						}
+						let week = temp[1].split('-');
+						week[1] = week[1].slice(0,week[1].indexOf('周'));
+						//选择周数内课程
+						if(this.weektime >= week[0] && this.weektime <= week[1]) {
+							innertime = i;
+							//console.log('i',i);
+						}
+						//选择最长的课程时间
+						let longtime = temp[2].split('-');
+						longtime = longtime[1][0] - longtime[0][2];
+						if(longtime > max) {
+							max = longtime;
+						}
+						
+						//console.log('temp',choose);
+						//temp[1] = temp[1].slice(0,)
+					}
+					console.log('longtime',max);
+					var trap = choose[innertime].split('#');
+					if(max >= 6) {
+						trap[2] = "(第1-8节)";
+					}else if (max >= 4) {
+						trap[2] = "(第1-6节)";
+					}else if (max >= 2) {
+						trap[2] = "(第1-4节)";
+					}else {
+					 	trap[2] = "(第1-2节)";
+					}
+					console.log('jie',trap[2]);
+				}else {
+					var trap = p.classDetails[i].name.split('#');
+				}
+				//冲突的课程
+				
 				if(trap[5]){
 					//判断该节课占4节还是2节
-					let test = trap[2].split("-")[1][0] - trap[2].split("-")[0][2];
+					let leng = trap[2].split("-");
+					let test = leng[1][0] - leng[0][leng[0].length - 1];
 					if(test != 1) {
+						this.flag = 0;
 						//将信息存下 在下一个循环补充object
-						this.local = i;
-						this.flag = 1;
+						//this.local = i;
+						if(test >= 6) {
+							this.flag = 3;
+						}else if(test >= 4) {
+							this.flag = 2;
+						}else {
+							this.flag = 1;
+						}
+						this.local.push({
+							local:i,
+							flag:this.flag
+						});
+
 					}
 
 					p.classDetails[i].name = trap[0] + trap[5];
@@ -358,6 +427,7 @@ export default {
 			}
 			return p;
 		});
+console.log("local",this.local);
 	},
 	//下拉刷新重新指向onLoad
 	async onPullDownRefresh() {

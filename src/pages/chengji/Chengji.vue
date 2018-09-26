@@ -58,17 +58,6 @@ export default {
 			return req;
 		});
 		if(cj.data == "error") {
-			cj = await post(url,{
-				iPlanetDirectoryPro:this.iPlanetDirectoryPro,
-				username:this.username,
-				//password:"970414jiang",
-				//position:"kb",
-				flag:"4",
-				xnxqdm:"2017-2018-2",
-				update:this.update
-			});
-		}
-		if(cj.data == "error") {
 			await wx.clearStorageSync();
 			wx.redirectTo({url:"../me/main"});
 		}
