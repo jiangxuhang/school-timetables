@@ -119,7 +119,7 @@ export default {
 			wx.showModal ({
 				title:'课程信息',
 				content:`${detail[0]}
-						${detail[1][0]}-${detail[1][1]}周
+						${detail[1][0]}-${detail[1][1]}周 ${detail[1][detail[1].length - 1]}
 						${detail[2]}
 						${detail[3]}
 						${detail[5]}
@@ -243,6 +243,60 @@ export default {
 				return p;
 			});
 		},
+		//渲染课表数组
+		createClassArr (savekb, week) {
+			var kbarr = [['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],['','','','','','','','']];
+			savekb.forEach((item) => {
+				let classtime = item[0][2];
+				let mid = item[0][1];
+				if (!mid[mid.length - 1] || mid[mid.length - 1] == week) {
+					if (classtime.indexOf('第1') != -1) {
+						console.log('mid', mid[mid.length - 1]);
+						for (let i = 0; i < mid.length; i += 2) {
+							if (mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
+								kbarr[0][item[1]] = item[0]
+							}
+						}
+					} else if (classtime.indexOf('第3') != -1) {
+						console.log('mid', mid[mid.length - 1]);
+							for (let i = 0; i < mid.length; i += 2) {
+								if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
+									kbarr[1][item[1]] = item[0]
+								}
+							}
+					} else if (classtime.indexOf('第5') != -1) {
+						console.log('mid', mid[mid.length - 1])
+						for (let i = 0; i < mid.length; i += 2) {
+							if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
+								kbarr[2][item[1]] = item[0]
+							}
+						}
+					} else if (classtime.indexOf('第7') != -1) {
+						console.log('mid', mid[mid.length - 1])
+						for (let i = 0; i < mid.length; i += 2) {
+							if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
+								kbarr[3][item[1]] = item[0]
+							}
+						}
+					} else if (classtime.indexOf('第9') != -1) {
+						console.log('mid', mid[mid.length - 1])
+						for (let i = 0; i < mid.length; i += 2) {
+							if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
+								kbarr[4][item[1]] = item[0]
+							}
+						}
+					} else if (classtime.indexOf('第11') != -1) {
+						for (let i = 0; i < mid.length; i += 2) {
+							if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
+								kbarr[5][item[1]] = item[0]
+							}
+						}
+					}
+				}
+			})
+			console.log('savekb',savekb);
+			return kbarr;
+		},
 		//选择周数
 		async bindWeekChange(e) {
 			let number = parseInt(e.target.value) + 1;
@@ -255,50 +309,7 @@ export default {
 				this.week = "双"
 			}
 			let savekb = await wx.getStorageSync("kb");
-			let kbarr = [['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],['','','','','','','','']];
-			savekb.forEach((item) => {
-				let classtime = item[0][2];
-				let mid = item[0][1];
-				if (classtime.indexOf('第1') != -1) {
-					for (let i = 0; i < mid.length; i += 2) {
-						if (mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
-							kbarr[0][item[1]] = item[0]
-						}
-					}
-				} else if (classtime.indexOf('第3') != -1) {
-					for (let i = 0; i < mid.length; i += 2) {
-						if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
-							kbarr[1][item[1]] = item[0]
-						}
-					}
-				} else if (classtime.indexOf('第5') != -1) {
-					for (let i = 0; i < mid.length; i += 2) {
-						if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
-							kbarr[2][item[1]] = item[0]
-						}
-					}
-				} else if (classtime.indexOf('第7') != -1) {
-					for (let i = 0; i < mid.length; i += 2) {
-						if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
-							kbarr[3][item[1]] = item[0]
-						}
-					}
-				} else if (classtime.indexOf('第9') != -1) {
-					for (let i = 0; i < mid.length; i += 2) {
-						if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
-							kbarr[4][item[1]] = item[0]
-						}
-					}
-				} else if (classtime.indexOf('第9') != -1) {
-					for (let i = 0; i < mid.length; i += 2) {
-						if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
-							kbarr[5][item[1]] = item[0]
-						}
-					}
-				}
-			})
-			this.kbinfo = kbarr;
-			console.log('kbarr',kbarr);
+			this.kbinfo = this.createClassArr(savekb, this.week);
 		}
 	},
 	async onLoad() {
@@ -315,6 +326,7 @@ export default {
 		this.week = this.weektime % 2 ? "单" : "双";
 		let savekb = await wx.getStorageSync("kb");
 		console.log('savekb',savekb);
+		//如果本地存储课表被清除 重新获取课表
 		if(!savekb) {
 			let url = "https://132.232.202.22/KCB/getname";
 			this.iPlanetDirectoryPro = await wx.getStorageSync("iPlanetDirectoryPro");
@@ -345,7 +357,7 @@ export default {
 				//password:"970414jiang",
 				//position:"kb",
 				flag:"4",
-				xnxqdm:"2016-2017-2",
+				xnxqdm:"2018-2019-1",
 				update:"false"
 			}).then((req)=>{
 				clearInterval(this.interval);
@@ -363,50 +375,7 @@ export default {
 		} else {
 			this.kbinfo = savekb;
 		}
-		var kbarr = [['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],['','','','','','','','']];
-		this.kbinfo.forEach((item) => {
-			let classtime = item[0][2];
-			let mid = item[0][1];
-			if (classtime.indexOf('第1') != -1) {
-				for (let i = 0; i < mid.length; i += 2) {
-					if (mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
-						kbarr[0][item[1]] = item[0]
-					}
-				}
-			} else if (classtime.indexOf('第3') != -1) {
-				for (let i = 0; i < mid.length; i += 2) {
-					if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
-						kbarr[1][item[1]] = item[0]
-					}
-				}
-			} else if (classtime.indexOf('第5') != -1) {
-				for (let i = 0; i < mid.length; i += 2) {
-					if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
-						kbarr[2][item[1]] = item[0]
-					}
-				}
-			} else if (classtime.indexOf('第7') != -1) {
-				for (let i = 0; i < mid.length; i += 2) {
-					if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
-						kbarr[3][item[1]] = item[0]
-					}
-				}
-			} else if (classtime.indexOf('第9') != -1) {
-				for (let i = 0; i < mid.length; i += 2) {
-					if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
-						kbarr[4][item[1]] = item[0]
-					}
-				}
-			} else if (classtime.indexOf('第9') != -1) {
-				for (let i = 0; i < mid.length; i += 2) {
-					if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
-						kbarr[5][item[1]] = item[0]
-					}
-				}
-			}
-		})
-		this.kbinfo = kbarr;
-		console.log(kbarr)
+		this.kbinfo = this.createClassArr(this.kbinfo, this.week);
 		
 	},
 	//下拉刷新重新指向onLoad

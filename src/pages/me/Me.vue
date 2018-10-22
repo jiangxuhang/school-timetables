@@ -74,70 +74,9 @@ export default {
           icon:'none',
         });
       }
-      wx.showToast({
-        title:"更新课程数据",
-        icon:"loading",
-        duration: 5000,
-      });
-      interval = setInterval(()=>{
-        wx.showToast({
-          title:"更新课程数据",
-          icon:"loading",
-          duration: 5000,
-        });
-      },5000);
-      this.iPlanetDirectoryPro = mis.data.iPlanetDirectoryPro;
-      await post("https://132.232.202.22/KCB/getname",{
-        iPlanetDirectoryPro:this.iPlanetDirectoryPro,
-        username:this.username,
-        flag:"4",
-        xnxqdm:"2018-2019-1",
-      });
       clearInterval(interval);
       wx.hideToast();
-      wx.showToast({
-        title:"更新成绩信息",
-        icon:"loading",
-        duration: 5000,
-      });
-      interval = setInterval(()=>{
-        wx.showToast({
-          title:"更新成绩信息",
-          icon:"loading",
-          duration: 5000,
-        });
-      },5000);
-      await post("https://132.232.202.22/KCB/getscore",{
-        iPlanetDirectoryPro:this.iPlanetDirectoryPro,
-        username:this.username,
-        flag:"4",
-        xnxqdm:"2018-2019-1",
-        update:'true'
-      });
-      clearInterval(interval);
-      wx.hideToast();
-      wx.showToast({
-        title:"更新考试信息",
-        icon:"loading",
-        duration: 5000,
-      });
-      interval = setInterval(()=>{
-        wx.showToast({
-          title:"更新考试信息",
-          icon:"loading",
-          duration: 5000,
-        });
-      },5000);
-      await post("https://132.232.202.22/KCB/exam",{
-        iPlanetDirectoryPro:this.iPlanetDirectoryPro,
-        username:this.username,
-        flag:"4",
-        xnxqdm:"2018-2019-1",
-        update:'true'
-      });
-      clearInterval(interval);
-      wx.hideToast();
-      await wx.setStorageSync("iPlanetDirectoryPro",this.iPlanetDirectoryPro);
+      await wx.setStorageSync("iPlanetDirectoryPro",mis.data.iPlanetDirectoryPro);
       await wx.setStorageSync("username",this.username);
       await wx.setStorageSync("password",this.password);
       wx.redirectTo({url:"../index/main"});

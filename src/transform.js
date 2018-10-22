@@ -143,10 +143,10 @@
 		            }
 		        }
 		    }
-		    console.log('slicearry',slicearry);
+		    console.log('slicearry', slicearry);
 		    let baseArray = slicearry;
 		    let len = baseArray.length;
-		    let n = 2; //假设每行显示4个
+		    let n = 2; //假设每行显示2个
 		    let lineNum = len % 2 === 0 ? len / 2 : Math.floor((len / 2) + 1);
 		    let res = [];
 		    for (let i = 0; i < lineNum; i++) //整理slicearry数组 
@@ -164,7 +164,7 @@
 		            newres.push(res[item]);
 		        }
 		    }
-		    console.log('newres',newres);
+		    console.log('newres', newres);
 		    for (let i = 0; i < newres.length; i++) {
 		        newres[i][0] = newres[i][0].split(" ");
 		        for (let j = 0; j < newres[i][0].length; j++) {
@@ -174,58 +174,63 @@
 		        }
 		    }
 		    let arrytest = [];
+		    let odd = '';
 		    for (let i = 0; i < newres.length; i++) {
-		        arrytest = newres[i][0][1].replace(/[^0-9]/ig, " ").trim().split(/\s+/);
-		        newres[i][0][1] = arrytest;
 		        if (newres[i][0][1].indexOf("双") != -1) {
-		            arrytest.push(newres[i][0][1][newres[i][0][1].indexOf("双")])
+		            console.log(newres[i][0][1].indexOf("双"));
+		            odd = newres[i][0][1][newres[i][0][1].indexOf("双")];
 		        } else if (newres[i][0][1].indexOf("单") != -1) {
-		            arrytest.push(newres[i][0][1][newres[i][0][1].indexOf("单")])
+		            console.log(newres[i][0][1].indexOf("单"));
+		            odd = newres[i][0][1][newres[i][0][1].indexOf("单")];
 		        }
+		        arrytest = newres[i][0][1].replace(/[^0-9]/ig, " ").trim().split(/\s+/);
+		        arrytest.push(odd);
+		        odd = '';
+		        newres[i][0][1] = arrytest;
 		    }
-		    console.log('test',arrytest);
-		 //    var kbarr = [['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],['','','','','','','','']];
-		 //    newres.forEach((item) => {
-			// 	let classtime = item[0][2];
-			// 	let mid = item[0][1];
-			// 	if (classtime.indexOf('第1') != -1) {
-			// 		for (let i = 0; i < mid.length; i += 2) {
-			// 			if (mid[i] <= weektime && mid[i + 1] >= weektime) {
-			// 				kbarr[0][item[1]] = item[0]
-			// 			}
-			// 		}
-			// 	} else if (classtime.indexOf('第3') != -1) {
-			// 		for (let i = 0; i < mid.length; i += 2) {
-			// 			if(mid[i] <= weektime && mid[i + 1] >= weektime) {
-			// 				kbarr[1][item[1]] = item[0]
-			// 			}
-			// 		}
-			// 	} else if (classtime.indexOf('第5') != -1) {
-			// 		for (let i = 0; i < mid.length; i += 2) {
-			// 			if(mid[i] <= weektime && mid[i + 1] >= weektime) {
-			// 				kbarr[2][item[1]] = item[0]
-			// 			}
-			// 		}
-			// 	} else if (classtime.indexOf('第7') != -1) {
-			// 		for (let i = 0; i < mid.length; i += 2) {
-			// 			if(mid[i] <= weektime && mid[i + 1] >= weektime) {
-			// 				kbarr[3][item[1]] = item[0]
-			// 			}
-			// 		}
-			// 	} else if (classtime.indexOf('第9') != -1) {
-			// 		for (let i = 0; i < mid.length; i += 2) {
-			// 			if(mid[i] <= weektime && mid[i + 1] >= weektime) {
-			// 				kbarr[4][item[1]] = item[0]
-			// 			}
-			// 		}
-			// 	} else if (classtime.indexOf('第9') != -1) {
-			// 		for (let i = 0; i < mid.length; i += 2) {
-			// 			if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
-			// 				kbarr[5][item[1]] = item[0]
-			// 			}
-			// 		}
-			// 	}
-			// })
+		    console.log('test', arrytest);
+		    //  var kbarr = [['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],['','','','','','','','']];
+		    //  newres.forEach((item) => {
+		    // 	let classtime = item[0][2];
+		    // 	let mid = item[0][1];
+		    // 	if (classtime.indexOf('第1') != -1) {
+		    // 		for (let i = 0; i < mid.length; i += 2) {
+		    // 			if (mid[i] <= weektime && mid[i + 1] >= weektime) {
+		    // 				kbarr[0][item[1]] = item[0]
+		    // 			}
+		    // 		}
+		    // 	} else if (classtime.indexOf('第3') != -1) {
+		    // 		for (let i = 0; i < mid.length; i += 2) {
+		    // 			if(mid[i] <= weektime && mid[i + 1] >= weektime) {
+		    // 				kbarr[1][item[1]] = item[0]
+		    // 			}
+		    // 		}
+		    // 	} else if (classtime.indexOf('第5') != -1) {
+		    // 		for (let i = 0; i < mid.length; i += 2) {
+		    // 			if(mid[i] <= weektime && mid[i + 1] >= weektime) {
+		    // 				kbarr[2][item[1]] = item[0]
+		    // 			}
+		    // 		}
+		    // 	} else if (classtime.indexOf('第7') != -1) {
+		    // 		for (let i = 0; i < mid.length; i += 2) {
+		    // 			if(mid[i] <= weektime && mid[i + 1] >= weektime) {
+		    // 				kbarr[3][item[1]] = item[0]
+		    // 			}
+		    // 		}
+		    // 	} else if (classtime.indexOf('第9') != -1) {
+		    // 		for (let i = 0; i < mid.length; i += 2) {
+		    // 			if(mid[i] <= weektime && mid[i + 1] >= weektime) {
+		    // 				kbarr[4][item[1]] = item[0]
+		    // 			}
+		    // 		}
+		    // 	} else if (classtime.indexOf('第9') != -1) {
+		    // 		for (let i = 0; i < mid.length; i += 2) {
+		    // 			if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
+		    // 				kbarr[5][item[1]] = item[0]
+		    // 			}
+		    // 		}
+		    // 	}
+		    // })
 		    //newres[i][0][1][0]是第一个周数的数字
 		    //newres[i][0][1][1]是第二个周数的数字
 		    //newres[i][0][0]是课程名

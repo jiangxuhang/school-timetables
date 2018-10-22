@@ -52,7 +52,7 @@ export default {
 	methods: {
 		todetail(e) {
 			// wx.setStorageSync("iPlanetDirectoryPro","iPlanetDirectoryPro=AQIC5wM2LY4Sfcynt6Em7J0k8sd%2B6LrAEKVzFzTulbX5J%2Fc%3D%40AAJTSQACMDE%3D%23");
-			let mis = wx.getStorageSync("username");
+			let mis = wx.getStorageSync("iPlanetDirectoryPro");
 			if(mis){
 				wx.navigateTo({ url:`../${e}/main` });
 			}else{
