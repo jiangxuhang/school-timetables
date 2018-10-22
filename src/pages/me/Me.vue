@@ -26,7 +26,7 @@
   </div>
 </template>
 <script>
-import {post} from '@/util'
+import { get,post } from '@/util'
 export default {
   components: {
   },
@@ -34,7 +34,7 @@ export default {
     return {
       username:null,
       password:null,
-      iPlanetDirectoryPro:null
+      iPlanetDirectoryPro:null,
     }
   },
   methods: {
@@ -52,10 +52,12 @@ export default {
         });
       },5000);
       await wx.setStorageSync("interval",interval);
-      const url = "https://kcb.sayetuan.com/schooltest/login";
+      const url = "https://132.232.202.22/KCB/Login";
+      //const url = "https://132.232.202.22/Test/Login";
       let mis = await post(url,{
         username:this.username,
-        password:this.password
+        password:this.password,
+        code:''
       }).then((req)=>{
         clearInterval(interval);
         wx.hideToast();
@@ -65,6 +67,7 @@ export default {
         wx.hideToast();
         return req;
       });
+      console.log("mis",mis)
       if(!mis.data.iPlanetDirectoryPro) {
         return wx.showToast({
           title:'登陆失败',
@@ -84,12 +87,11 @@ export default {
         });
       },5000);
       this.iPlanetDirectoryPro = mis.data.iPlanetDirectoryPro;
-      await post("https://kcb.sayetuan.com/schooltest/timetable",{
+      await post("https://132.232.202.22/KCB/getname",{
         iPlanetDirectoryPro:this.iPlanetDirectoryPro,
         username:this.username,
         flag:"4",
         xnxqdm:"2018-2019-1",
-        update:'true'
       });
       clearInterval(interval);
       wx.hideToast();
@@ -105,7 +107,7 @@ export default {
           duration: 5000,
         });
       },5000);
-      await post("https://kcb.sayetuan.com/schooltest/score",{
+      await post("https://132.232.202.22/KCB/getscore",{
         iPlanetDirectoryPro:this.iPlanetDirectoryPro,
         username:this.username,
         flag:"4",
@@ -126,7 +128,7 @@ export default {
           duration: 5000,
         });
       },5000);
-      await post("https://kcb.sayetuan.com/schooltest/exam",{
+      await post("https://132.232.202.22/KCB/exam",{
         iPlanetDirectoryPro:this.iPlanetDirectoryPro,
         username:this.username,
         flag:"4",

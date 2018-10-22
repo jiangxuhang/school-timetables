@@ -14,6 +14,7 @@
 </template>
 <script>
 import { post } from '@/util'
+import { getscore } from '@/transform'
 export default {
 	data(){
 		return {
@@ -24,7 +25,7 @@ export default {
 	methods: {
 	},
 	async onLoad() {
-		const url = "https://kcb.sayetuan.com/schoolwatcher/score";
+		const url = "https://132.232.202.22/KCB/getscore";
 		this.iPlanetDirectoryPro = await wx.getStorageSync("iPlanetDirectoryPro");
 		this.username = await wx.getStorageSync("username");
 		wx.showToast({
@@ -62,18 +63,7 @@ export default {
 			wx.redirectTo({url:"../me/main"});
 		}
 		//将需要的信息整合为对象
-		this.cjxx = cj.data.map((p)=>{
-			if(p.classDetails[1]){
-				let info = {
-					name:p.classDetails[2].name,
-					score:p.classDetails[6].name,
-					fee:p.classDetails[5].name
-				}
-				return info;
-			}else{
-				return "";
-			}
-		});
+		this.cjxx = getscore(cj.data);
 	},
 	//下拉刷新重新执行onLoad
 	async onPullDownRefresh() {

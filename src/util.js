@@ -2,10 +2,10 @@
 import config from './config'
 
 // http get工具函数 获取数据
-export function get (url, data) {
+export function get (url, data, header) {
   return request(url,'GET', data)
 }
-export function post (url, data) {
+export function post (url, data, header) {
   return request(url,'POST', data)
 }
 
@@ -18,6 +18,9 @@ function request(url,method,data,header={"Content-Type":"application/x-www-form-
       url:url, 
       success: function (res) {
           resolve(res)
+      },
+      error: function (err) {
+        reject(err);
       }
     })
   })

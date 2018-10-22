@@ -56,18 +56,14 @@
   		</div>
   		<div class = "kecheng">
 		    <div v-for='(kc,num) in kbinfo' class = "main" :key="num">
-		    	<div v-for='(name,index) in kc.classDetails' class = "content"
+		    	<div v-for='(detail,index) in kc' class = "content"
 		    	:key="index"
 		    	:class="{
-		    		dispa:name.name,
+		    		dispa:detail[0],
 		    	}"
-		    	:style="{
-		    		//过滤周数和单双周课程 显示当前周的课
-		    		visibility:weektime >= name.week && weektime <= name.weekend && (!name.danshuang || name.danshuang == week) ? 'visible':'hidden'
-		    	}"
-		    	@click = "showInfo(name)"
+		    	@click = "showInfo(detail)"
 		    	>
-		    		<span >{{name.name}}</span>
+		    		<span class="detailtext">{{detail[0]}}{{detail[5]}}</span>
 		    	</div>
 		    </div>	
 	    </div>
@@ -82,6 +78,7 @@
 </template>
 <script>
 import { post } from '@/util'
+import { getkbifo } from '@/transform'
 export default {
 	data(){
 		return {
@@ -97,7 +94,9 @@ export default {
 			interval:null,
 			update:'false',
 			notimekb:null,
-			local:[]
+			local:[],
+			changeweek:false,
+			pop:null
 		}
 	},
 	computed: {
@@ -116,13 +115,16 @@ export default {
 		}
 	},
 	methods: {
-		showInfo(classInfo) {
-			wx.showModal({
+		showInfo(detail) {
+			wx.showModal ({
 				title:'课程信息',
-				content:`${classInfo.name}
-						${classInfo.week}-${classInfo.weekend}周
-						${classInfo.teacher}
+				content:`${detail[0]}
+						${detail[1][0]}-${detail[1][1]}周
+						${detail[2]}
+						${detail[3]}
+						${detail[5]}
 				`,
+				showCancel: false
 			});
 		},
 		//选择学期
@@ -242,7 +244,7 @@ export default {
 			});
 		},
 		//选择周数
-		bindWeekChange(e) {
+		async bindWeekChange(e) {
 			let number = parseInt(e.target.value) + 1;
 			this.weektime = number;
 			if(number % 2) {
@@ -252,6 +254,51 @@ export default {
 				//双周
 				this.week = "双"
 			}
+			let savekb = await wx.getStorageSync("kb");
+			let kbarr = [['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],['','','','','','','','']];
+			savekb.forEach((item) => {
+				let classtime = item[0][2];
+				let mid = item[0][1];
+				if (classtime.indexOf('第1') != -1) {
+					for (let i = 0; i < mid.length; i += 2) {
+						if (mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
+							kbarr[0][item[1]] = item[0]
+						}
+					}
+				} else if (classtime.indexOf('第3') != -1) {
+					for (let i = 0; i < mid.length; i += 2) {
+						if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
+							kbarr[1][item[1]] = item[0]
+						}
+					}
+				} else if (classtime.indexOf('第5') != -1) {
+					for (let i = 0; i < mid.length; i += 2) {
+						if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
+							kbarr[2][item[1]] = item[0]
+						}
+					}
+				} else if (classtime.indexOf('第7') != -1) {
+					for (let i = 0; i < mid.length; i += 2) {
+						if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
+							kbarr[3][item[1]] = item[0]
+						}
+					}
+				} else if (classtime.indexOf('第9') != -1) {
+					for (let i = 0; i < mid.length; i += 2) {
+						if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
+							kbarr[4][item[1]] = item[0]
+						}
+					}
+				} else if (classtime.indexOf('第9') != -1) {
+					for (let i = 0; i < mid.length; i += 2) {
+						if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
+							kbarr[5][item[1]] = item[0]
+						}
+					}
+				}
+			})
+			this.kbinfo = kbarr;
+			console.log('kbarr',kbarr);
 		}
 	},
 	async onLoad() {
@@ -263,171 +310,104 @@ export default {
 		if(Math.ceil(day / 7) > 18 || Math.ceil(day / 7) <= 0) {
 			this.weektime = 1;
 		}else {
-			console.log("yes");
 			this.weektime = Math.ceil(day / 7);
 		}
 		this.week = this.weektime % 2 ? "单" : "双";
-		const url = "https://kcb.sayetuan.com/schooltest/timetable";
-		this.iPlanetDirectoryPro = await wx.getStorageSync("iPlanetDirectoryPro");
-		this.username = await wx.getStorageSync("username");
-		let gradeinfo = wx.getStorageSync("grade");
-		if(gradeinfo) {
-			this.grade = gradeinfo;
-		}
-		wx.showToast({
-			title:"加载中",
-			icon:"loading",
-			duration: 5000,
-		});
-		this.interval = setInterval(()=>{
+		let savekb = await wx.getStorageSync("kb");
+		console.log('savekb',savekb);
+		if(!savekb) {
+			let url = "https://132.232.202.22/KCB/getname";
+			this.iPlanetDirectoryPro = await wx.getStorageSync("iPlanetDirectoryPro");
+			if (!this.iPlanetDirectoryPro) {
+				wx.redirectTo({url:"../me/main"});
+			}
+			this.username = await wx.getStorageSync("username");
+			let gradeinfo = wx.getStorageSync("grade");
+			if(gradeinfo) {
+				this.grade = gradeinfo;
+			}
 			wx.showToast({
 				title:"加载中",
 				icon:"loading",
 				duration: 5000,
 			});
-		},5000);
-		await wx.setStorageSync("interval",this.interval);
-		let kb = await post(url,{
-			iPlanetDirectoryPro:this.iPlanetDirectoryPro,
-			username:this.username,
-			//password:"970414jiang",
-			//position:"kb",
-			flag:"4",
-			xnxqdm:this.grade,
-			update:this.update
-		}).then((req)=>{
-			clearInterval(this.interval);
-			wx.hideToast();
-			return req;
-		},(req)=>{
-			clearInterval(this.interval);
-			wx.hideToast();
-			return req;
-		});
-		// console.log("test",kb);
-		if(kb.data == "error") {
-			await wx.clearStorageSync();
-			wx.redirectTo({url:"../me/main"});
+			this.interval = setInterval(()=>{
+				wx.showToast({
+					title:"加载中",
+					icon:"loading",
+					duration: 5000,
+				});
+			},5000);
+			await wx.setStorageSync("interval",this.interval);
+			let kb = await post(url,{
+				iPlanetDirectoryPro:this.iPlanetDirectoryPro,
+				username:this.username,
+				//password:"970414jiang",
+				//position:"kb",
+				flag:"4",
+				xnxqdm:"2016-2017-2",
+				update:"false"
+			}).then((req)=>{
+				clearInterval(this.interval);
+				wx.hideToast();
+				return req;
+			},(req)=>{
+				clearInterval(this.interval);
+				wx.hideToast();
+				return req;
+			});
+			this.kbinfo = getkbifo(kb.data, this.weektime);
+			console.log('kb',kb);
+			//课表本地存储
+			await wx.setStorageSync("kb",this.kbinfo);
+		} else {
+			this.kbinfo = savekb;
 		}
-		//未安排时间的课程
-		// let notimekb = kb.data[11].classDetails[0].name;
-		// this.notimekb = notimekb.slice(26).match(/([^\s]+[\s]){3}/g);
-		// console.log("this.notimekb",this.notimekb);
-		//去除多余项 过滤掉空数据
-		this.kbinfo = kb.data.slice(0,11).filter((value,index) =>{
-			if(index % 2 == 0) {
-				return true;
-			}
-		});
-		//处理字符串 提取出课程名称和地点
-		this.kbinfo.map((p)=>{
-			if(this.local.length) {
-				for(let i = 0; i < this.local.length; i++) {
-					if(this.local[i].flag) {
-						p.classDetails.splice(this.local[i].local,0,{name:""});
-						this.local[i].flag--;
+		var kbarr = [['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],['','','','','','','','']];
+		this.kbinfo.forEach((item) => {
+			let classtime = item[0][2];
+			let mid = item[0][1];
+			if (classtime.indexOf('第1') != -1) {
+				for (let i = 0; i < mid.length; i += 2) {
+					if (mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
+						kbarr[0][item[1]] = item[0]
 					}
 				}
-				//p.classDetails.splice(1,0,"111");
-				//p.classDetails.splice(this.local,0,{name:""});
-			}
-			for(let i = 0; i < p.classDetails.length; i++){
-				if(p.classDetails[i].name.indexOf('|') != -1) {
-					//通过|分割相同位置的课程
-					let choose = p.classDetails[i].name.split('|');
-					//时间最长的课程
-					let max = 1;
-					//当前周数所在的课程
-					let innertime = 0;
-					for(let i = 0; i < choose.length; i++) {
-						let temp = choose[i].split('#');
-						if(temp[1].indexOf(']') != -1) {
-							temp.shift();
-						}
-						let week = temp[1].split('-');
-						week[1] = week[1].slice(0,week[1].indexOf('周'));
-						//选择周数内课程
-						if(this.weektime >= week[0] && this.weektime <= week[1]) {
-							innertime = i;
-							//console.log('i',i);
-						}
-						//选择最长的课程时间
-						let longtime = temp[2].split('-');
-						longtime = longtime[1][0] - longtime[0][2];
-						if(longtime > max) {
-							max = longtime;
-						}
-						
-						//console.log('temp',choose);
-						//temp[1] = temp[1].slice(0,)
+			} else if (classtime.indexOf('第3') != -1) {
+				for (let i = 0; i < mid.length; i += 2) {
+					if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
+						kbarr[1][item[1]] = item[0]
 					}
-					console.log('longtime',max);
-					var trap = choose[innertime].split('#');
-					if(max >= 6) {
-						trap[2] = "(第1-8节)";
-					}else if (max >= 4) {
-						trap[2] = "(第1-6节)";
-					}else if (max >= 2) {
-						trap[2] = "(第1-4节)";
-					}else {
-					 	trap[2] = "(第1-2节)";
-					}
-					console.log('jie',trap[2]);
-				}else {
-					var trap = p.classDetails[i].name.split('#');
 				}
-				//冲突的课程
-				
-				if(trap[5]){
-					//判断该节课占4节还是2节
-					let leng = trap[2].split("-");
-					let test = leng[1][0] - leng[0][leng[0].length - 1];
-					if(test != 1) {
-						this.flag = 0;
-						//将信息存下 在下一个循环补充object
-						//this.local = i;
-						if(test >= 6) {
-							this.flag = 3;
-						}else if(test >= 4) {
-							this.flag = 2;
-						}else {
-							this.flag = 1;
-						}
-						this.local.push({
-							local:i,
-							flag:this.flag
-						});
-
+			} else if (classtime.indexOf('第5') != -1) {
+				for (let i = 0; i < mid.length; i += 2) {
+					if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
+						kbarr[2][item[1]] = item[0]
 					}
-
-					p.classDetails[i].name = trap[0] + trap[5];
-					//单双周课程
-					if( trap[1].indexOf("(") != -1 ) {
-						p.classDetails[i].danshuang = trap[1].split("(")[1][0];
-						var week = trap[1].split("(")[0];
-						week = week.split("-");
-						//取出周数的起始和结束
-						p.classDetails[i].week = week[0];
-						//去除最后的周 留下数字
-						var weekslice = week[week.length - 1].indexOf("周");
-						p.classDetails[i].weekend = week[week.length - 1].slice(0,weekslice);
-					}else{
-						var week = trap[1].split("-");
-						//取出周数的起始和结束
-						p.classDetails[i].week = week[0];
-						//去除最后的周 留下数字
-						var weekslice = week[week.length - 1].indexOf("周");
-						p.classDetails[i].weekend = week[week.length - 1].slice(0,weekslice);
+				}
+			} else if (classtime.indexOf('第7') != -1) {
+				for (let i = 0; i < mid.length; i += 2) {
+					if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
+						kbarr[3][item[1]] = item[0]
 					}
-					p.classDetails[i].teacher = trap[3];
-				}else{
-					// console.log(p.classDetails[i].name);
-					p.classDetails[i].name = "";
+				}
+			} else if (classtime.indexOf('第9') != -1) {
+				for (let i = 0; i < mid.length; i += 2) {
+					if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
+						kbarr[4][item[1]] = item[0]
+					}
+				}
+			} else if (classtime.indexOf('第9') != -1) {
+				for (let i = 0; i < mid.length; i += 2) {
+					if(mid[i] <= this.weektime && mid[i + 1] >= this.weektime) {
+						kbarr[5][item[1]] = item[0]
+					}
 				}
 			}
-			return p;
-		});
-console.log("local",this.local);
+		})
+		this.kbinfo = kbarr;
+		console.log(kbarr)
+		
 	},
 	//下拉刷新重新指向onLoad
 	async onPullDownRefresh() {

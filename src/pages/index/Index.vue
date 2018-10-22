@@ -1,7 +1,7 @@
 <template>
 	<div class = "content">
 		<div class = "info">
-			<button open-type="share">分享五个群 三元红包</button>
+			<button open-type="share">黑大教务系统更新 恢复服务时间10.14号</button>
 		</div>
 		<div class = "one_row">
 	    <div class = "kebiao" @click="todetail('comments')">
@@ -73,9 +73,10 @@ export default {
 			wx.navigateTo({ url:"../gongyi/main"});
 		},
 		showMap() {
-			wx.previewImage({
-				urls:["http://www.hlju.edu.cn/images/xydt1111.jpg"]
-			})
+			// wx.previewImage({
+			// 	urls:["http://www.hlju.edu.cn/images/xydt1111.jpg"]
+			// })
+			wx.navigateTo({ url:"../map/main"});
 		}
 	},
 	async onPullDownRefresh() {
