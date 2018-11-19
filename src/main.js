@@ -13,8 +13,12 @@ export default{
       'navigationBarBackgroundColor': 'white',
       'navigationBarTitleText': '课程婊',
       'navigationBarTextStyle': 'black',
-      'enablePullDownRefresh':true
+      'enablePullDownRefresh': true
     },
+    'navigateToMiniProgramAppIdList': [
+      'wxe1abf78e095dc1a0',
+      'wx1636027207e6fb44'
+    ]
     // 'tabBar': {
     //   selectedColor: '#EA5149',
     //   list: [

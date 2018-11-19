@@ -129,119 +129,6 @@ export default {
 		},
 		//选择学期
 		async bindPickerChange(e) {
-			let number = e.target.value;
-			if(number == "0") {
-				this.xnxqdm = "2018-2019-1";
-				this.grade = "2018-2019-1";
-				await wx.setStorageSync("grade",this.grade);
-			}else if (number == "1") {
-				this.xnxqdm = "2017-2018-2";
-				this.grade = "2017-2018-2";
-				await wx.setStorageSync("grade",this.grade);
-			}else {
-				this.xnxqdm = "2017-2018-1";
-				this.grade = "2017-2018-1";
-				await wx.setStorageSync("grade",this.grade);
-			}
-
-			let newurl = "https://kcb.sayetuan.com/schoolwatcher/timetable";
-			wx.showToast({
-				title:"加载中",
-				icon:"loading",
-				duration: 5000,
-			});
-			this.interval = setInterval(()=>{
-				wx.showToast({
-					title:"加载中",
-					icon:"loading",
-					duration: 5000,
-				});
-			},5000);
-			await wx.setStorageSync("interval",this.interval);
-			let newkb = await post(newurl,{
-				iPlanetDirectoryPro:this.iPlanetDirectoryPro,
-				username:this.username,
-				//password:"970414jiang",
-				//position:"kb",
-				flag:"4",
-				xnxqdm:this.grade,
-				update:'true'
-			}).then((req)=>{
-				clearInterval(this.interval);
-				wx.hideToast();
-				return req;
-			},(req)=>{
-				clearInterval(this.interval);
-				wx.hideToast();
-				return req;
-			});
-			if(newkb.data == "error") {
-				await wx.clearStorageSync();
-				wx.redirectTo({url:"../me/main"});
-			}
-			//未安排时间的课程
-			// let newnotimekb = newkb.data[11].classDetails[0].name;
-			// this.notimekb = newnotimekb.slice(26).match(/([^\s]+[\s]){3}/g);
-			//去除空数据
-			this.kbinfo = newkb.data.slice(0,11).filter((value,index) => {
-				if(index % 2 == 0) {
-					return true;
-				}
-			});
-			this.kbinfo.map((p)=>{
-				if(this.flag) {
-					this.flag--;
-					//p.classDetails.splice(1,0,"111");
-					p.classDetails.splice(this.local,0,{name:""});
-					console.log(p.classDetails);
-				}
-				for(let i = 0; i < p.classDetails.length; i ++){
-					let trap = p.classDetails[i].name.split(' ');
-					if(trap[6]) {
-						p.classDetails[i].other = trap[6] + " " + trap[7] + " " + trap[11];
-						console.log(p.classDetails[i].other);
-					}
-					if(trap[5]){
-						//判断该节课占4节还是2节
-						let leng = trap[2].split("-");
-						let test = leng[1][0] - leng[0][leng[0].length - 1];
-						if(test != 1) {
-							//将信息存下 在下一个循环补充object
-							this.local = i;
-							if(test >= 6) {
-								this.flag = 3;
-							}else if (test >= 4) {
-								this.flag = 2;
-							}else {
-								this.flag = 1;
-							}
-						}
-
-						p.classDetails[i].name = trap[0] + trap[5];
-						if( trap[1].indexOf("(") != -1 ) {
-							p.classDetails[i].danshuang = trap[1].split("(")[1][0];
-							var week = trap[1].split("(")[0];
-							week = week.split("-");
-							//取出周数的起始和结束
-							p.classDetails[i].week = week[0];
-							//去除最后的周 留下数字
-							var weekslice = week[week.length - 1].indexOf("周");
-							p.classDetails[i].weekend = week[week.length - 1].slice(0,weekslice);
-						}else{
-							var week = trap[1].split("-");
-							//取出周数的起始和结束
-							p.classDetails[i].week = week[0];
-							//去除最后的周 留下数字
-							var weekslice = week[week.length - 1].indexOf("周");
-							p.classDetails[i].weekend = week[week.length - 1].slice(0,weekslice);
-						}
-					}else{
-						// console.log(p.classDetails[i].name);
-						p.classDetails[i].name = "";
-					}
-				}
-				return p;
-			});
 		},
 		//渲染课表数组
 		createClassArr (savekb, week) {
@@ -328,7 +215,7 @@ export default {
 		console.log('savekb',savekb);
 		//如果本地存储课表被清除 重新获取课表
 		if(!savekb) {
-			let url = "https://132.232.202.22/KCB/getname";
+			let url = "https://www.sayetuan.com/KCB/getname";
 			this.iPlanetDirectoryPro = await wx.getStorageSync("iPlanetDirectoryPro");
 			if (!this.iPlanetDirectoryPro) {
 				wx.redirectTo({url:"../me/main"});

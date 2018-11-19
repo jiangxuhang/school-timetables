@@ -28,7 +28,7 @@ export default {
 	methods: {
 	},
 	async onLoad() {
-		const url = "https://132.232.202.22/KCB/exam";
+		const url = "https://www.sayetuan.com/KCB/exam";
 		this.iPlanetDirectoryPro = await wx.getStorageSync("iPlanetDirectoryPro");
 		this.username = await wx.getStorageSync("username");
 		wx.showToast({
@@ -61,7 +61,7 @@ export default {
 			wx.hideToast();
 			return req;
 		});
-		console.log('ks',getexam(ks.data))
+		console.log('ks',ks)
 		this.ksxx = getexam(ks.data);
 		if(ks.data == "error") {
 			await wx.clearStorageSync();

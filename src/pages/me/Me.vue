@@ -18,10 +18,6 @@
     </div>
     <div class="testinfo">
       每次导入都会获取最新的数据信息
-      <div class="testinfo">
-        温馨提示:若密码输错三次将无法导入
-      </div>
-        解决方案:在校园网登录成功确认账号密码返回导入即可
     </div>
   </div>
 </template>
@@ -52,8 +48,7 @@ export default {
         });
       },5000);
       await wx.setStorageSync("interval",interval);
-      const url = "https://132.232.202.22/KCB/Login";
-      //const url = "https://132.232.202.22/Test/Login";
+      const url = "https://www.sayetuan.com/KCB/Login";
       let mis = await post(url,{
         username:this.username,
         password:this.password,
@@ -79,6 +74,7 @@ export default {
       await wx.setStorageSync("iPlanetDirectoryPro",mis.data.iPlanetDirectoryPro);
       await wx.setStorageSync("username",this.username);
       await wx.setStorageSync("password",this.password);
+      await wx.setStorageSync("kb",'');
       wx.redirectTo({url:"../index/main"});
     }
   }

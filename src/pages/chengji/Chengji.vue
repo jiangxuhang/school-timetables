@@ -25,7 +25,7 @@ export default {
 	methods: {
 	},
 	async onLoad() {
-		const url = "https://132.232.202.22/KCB/getscore";
+		const url = "https://www.sayetuan.com/KCB/getscore";
 		this.iPlanetDirectoryPro = await wx.getStorageSync("iPlanetDirectoryPro");
 		this.username = await wx.getStorageSync("username");
 		wx.showToast({

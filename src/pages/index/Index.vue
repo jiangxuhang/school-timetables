@@ -1,7 +1,7 @@
 <template>
 	<div class = "content">
 		<div class = "info">
-			<button open-type="share">黑大教务系统更新 恢复服务时间10.14号</button>
+			<button open-type="share">欢迎光临 点击分享</button>
 		</div>
 		<div class = "one_row">
 	    <div class = "kebiao" @click="todetail('comments')">
@@ -34,15 +34,15 @@
 	  <div class = "three_row">
 	  	<div class = "siliuji" @click = "linkToGy">
 	  		<img src="../../images/siliuji.png" alt="">
-	  		<span class = "tap">公益项目</span>
+	  		<span class = "tap">黑大树</span>
 	  	</div>
-	  	<div class = "lianxi" @click = "wait">
+	  	<div class = "lianxi" @click = "otherMini">
 	  		<img src="../../images/lianxi.png" alt="">
-	  		<span class = "tap">万人聊天群</span>
+	  		<span class = "tap">四六级查询</span>
 	  	</div>
 	  	<div class = "whoami" @click = "wait">
-	  		<img src="../../images/xiaozhao.png" alt="">
-	  		<span class = "tap">活动</span>
+	  		<img src="../../images/luotuo.png" class="luotuo" alt="">
+	  		<span class = "tap" style="margin-top:-7rpx">骆驼校招</span>
 	  	</div>
 	  </div>
 	</div>
@@ -62,21 +62,24 @@ export default {
 		linkToUs() {
 			wx.navigateTo({ url:"../who/main"});
 		},
-		
+		otherMini() {
+			wx.navigateToMiniProgram({
+				appId: 'wxe1abf78e095dc1a0',
+			})
+		},
 		wait() {
-			wx.showToast({
-				title:'功能开发中',
-				icon:'none',
+			wx.navigateToMiniProgram({
+				appId: 'wx1636027207e6fb44',
 			})
 		},
 		linkToGy() {
 			wx.navigateTo({ url:"../gongyi/main"});
 		},
 		showMap() {
-			// wx.previewImage({
-			// 	urls:["http://www.hlju.edu.cn/images/xydt1111.jpg"]
-			// })
-			wx.navigateTo({ url:"../map/main"});
+			wx.previewImage({
+				urls:["http://www.hlju.edu.cn/images/xydt1111.jpg"]
+			})
+			//wx.navigateTo({ url:"../map/main"});
 		}
 	},
 	async onPullDownRefresh() {
@@ -135,6 +138,11 @@ export default {
 		line-height:1rem;
 		height:1rem;
 		margin-top:-50rpx;
+	}
+	.luotuo {
+		width:170rpx;
+		height:178rpx;
+		padding: 60rpx 0 0 40rpx;
 	}
 
 </style>
